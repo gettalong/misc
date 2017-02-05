@@ -1,0 +1,8 @@
+--- name:paths
+/default.template:
+  blocks:
+    defaults:
+      pipeline: [blocks]
+
+/**/:
+  handler: directory

@@ -1,0 +1,278 @@
+<section class="slide"><div class="center">
+
+# Working With PDFs in Ruby {#title}
+
+\\
+Thomas Leitner
+
+![github](github.png){: style="vertical-align: middle"} @gettalong  
+![twitter](twitter.png){: style="vertical-align: middle; margin-right: -8px" height="48px" height="48px"} @_gettalong
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+{:.bad}
+## Note
+
+Shameless plug for one of my projects ;)
+{:.slide}
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+{:.hl}
+... but **you** might find it useful, too!
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Curent Situation
+
+* *Prawn*{:.hl} generates PDFs
+* *pdf-reader*{:.hl} reads PDFs
+* *combinepdf*{:.hl} has basic PDF merge functionality
+* *origami*{:.hl} is intended for auditing PDFs
+* Various Java libraries for JRuby (e.g. PDFBox)
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.bad.center}
+## Problems
+
+* {:.slide} No complete, integrated solution
+* {:.slide} PDF specification only partly supported
+* {:.slide} Performance/Memory consumption
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.hl.center}
+## What if...?
+
+* {:.slide} there was a library for **reading and writing PDFs**{:.hl},
+* {:.slide} that supports **most parts of the PDF specification**{:.hl},
+* {:.slide} supports content generation similar to Prawn,
+* {:.slide} can easily be extended if needed,
+* {:.slide} and is written in **pure Ruby**{:.hl}?
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## Meet HexaPDF
+
+Goal: **One library for all things PDF**{:.hl}
+
+* Reading, modifying, writing PDFs
+* Encryption
+* Content Generation
+* Basic validation of PDFs
+* No Dependencies
+* Fast and memory efficient
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## Fully Tested
+
+<pre>
+$ rake test
+
+# Running:
+
+...............|SNIP 100s more dots|........................
+
+Finished in <b class="hl">1.949720s</b>, 742.6706 runs/s, 14285.6380 assertions/s.
+
+<b class="hl">1448 runs, 27853 assertions</b>, 0 failures, 0 errors, 0 skips
+Coverage report generated. 6999 / 6999 LOC (<b class="hl">100.0%</b>) covered.
+</pre>
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## Read--Optimize--Write Performance
+
+|------------------------------------------------------------|
+| e.pdf                |     Time |     Memory |   File size |
+|----------------------|---------:|-----------:|------------:|
+| hexapdf              |  1.006ms |  46.960KiB |  21.770.465 |
+| origami              |  3.301ms | 153.628KiB |  21.796.847 |
+| pdftk                |    681ms | 123.152KiB |  21.874.883 |
+| qpdf-comp            |  1.517ms |  65.172KiB |  21.787.558 |
+| smpdf                | 37.539ms | 647.440KiB |  21.188.516 |
+|------------------------------------------------------------|
+{: style="margin: 0 auto;"}
+
+[Full benchmark at https://gist.github.com/gettalong/][gist1]
+
+[gist1]: https://gist.github.com/gettalong/8955ff5403fe7abb7bee
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## Text Output Performance
+
+Comparison with Python's reportlab and Prawn,\\
+using reportlab's odyssey demo as benchmark.
+
+reportlab w/ C extension | 0.27s | 930 pages/second |
+reportlab w/o C extension | 0.67s | 350 pages/second |
+Prawn | 6.46s | 35 pages/second |
+HexaPDF | 0.96s | 249 pages/second |
+{: style="border: 1"}
+
+[Full benchmark at https://gist.github.com/gettalong/][gist2]
+
+[gist2]: https://gist.github.com/gettalong/0d7c576064725774299cdf4d1a51d2b9
+
+</div></section>
+
+
+<section class="slide"><div class="center">
+
+# Less Talk --- More Code
+
+Examples of what **HexaPDF**{:.hl} can do **today**{:hl}
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## PDF Compression
+
+~~~ ruby
+HexaPDF:::Document.open(ARGV.shift) do |doc|
+  doc.task(:optimize, compact: true,
+           object_streams: :generate, compress_pages: false)
+  doc.write(ARGV.shift, validate: true)
+end
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## Basic PDF File Merging
+
+~~~ ruby
+target = HexaPDF::Document.new
+output_name = ARGV.shift
+
+ARGV.each do |file|
+  pdf = HexaPDF::Document.new(io: File.open(file, 'rb'))
+  pdf.pages.each_page do |page| 
+    target.pages.add_page(target.import(page))
+  end
+end
+
+target.trailer.info[:Title] = 'Merged document'
+target.write(output_name)
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## Content Generation
+
+~~~ ruby
+doc = HexaPDF::Document.new
+canvas = doc.pages.add_page.canvas
+
+canvas.fill_color(255, 255, 0)
+canvas.line(100, 100, 200, 200).stroke
+canvas.ellipse(520, 50, a: 30, b: 15, inclination: 45).fill_stroke
+canvas.image("picture.jpg", at: [300, 300], width: 100)
+canvas.image("vectors.pdf", at: [500, 700], height: 200)
+canvas.font("Times", size: 20, variant: :bold)
+canvas.text("Works!", at: [100, 750])
+
+doc.write("graphics.pdf")
+~~~
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+![Graphics Sample](graphics.png){:style="height: 400px"}
+{: style="float: left; margin: 0"}
+
+![TTF Sample](ttf.png){:style="height: 400px"}
+{: style="float: right; margin: 0 0 0 10px"}
+
+![Text Sample](text.png){:style="height: 400px"}
+{: style="float: right; margin: 0 0 0 10px"}
+
+</div></section>
+
+<section class="slide"><div class="">
+
+{:.center}
+## Text Processing
+
+~~~ ruby
+class SampleProcessor < HexaPDF::Content::Processor
+  def show_text(str)
+    boxes = decode_text_with_positioning(str)
+    # do something with the character boxes
+  end
+end
+
+doc = HexaPDF::Document.open(ARGV.shift)
+processor = SampleProcessor.new
+doc.pages.each_page do |page|
+  puts "Processing page"
+  page.process_contents(processor)
+end
+doc.write('output.pdf')
+~~~
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+![Text Processing Sample](process.png){:style="height: 500px"}
+{: style="float: left; margin: 0"}
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+# So... what's the catch?
+{:.bad style="margin-bottom: 2em"}
+
+{:.slide}
+Not yet released :-(
+
+{:.slide.hl}
+**But in the next few weeks :-)**
+
+</div></section>
+
+
+<section class="slide"><div class="center">
+
+# Thank you! {#thanks}
+
+Slides available at\\
+<http://talks.gettalong.org/euruko2016/>
+
+</div></section>
+
