@@ -1,0 +1,160 @@
+---
+title: PDF Manipulation with HexaPDF
+steps:
+  title: {x: 0, y: 0, scale: 2}
+  motivation: {x: 0, y: -1500, rotate: -90}
+  features: {x: 1172, y: -935, rotate: -39}
+  examples: {x: 1462, y: 333, rotate: 13}
+#  creation: {x: 650, y: 1351, rotate: 64}
+  performance: {x: -650, y: 1351, rotate: 115}
+  future: {x: -1462, y: 333, rotate: 167}
+  thanks: {x: -1172, y: -935, rotate: 218}
+  ueberblick: {x: 0, y: 0, scale: 5}
+---
+
+## PDF Manipulation with HexaPDF {#title}
+
+<div style="text-align: center" markdown="1">
+I'm Thomas
+
+a.k.a
+
+![github](github.png){: style="vertical-align: middle"} @gettalong  
+![twitter](twitter.png){: style="vertical-align: middle; margin-right: -8px" height="48px" height="48px"} @_gettalong
+
+You may know me from kramdown...
+{: style="margin-top: 4em; font-size: 60%; color: #666"}
+</div>
+
+
+## Motivation {#motivation}
+
+* Many libraries/tools for PDF manipulation in other languages
+
+  * Java: iText, Apache PDFBox, PDF Clown, JPod
+  * C/C++: pdflib, qpdf, GNUpdf, hummuspdf, libharu
+  * Python: PyPDF2, reportlab, pdfrw, pdfminer
+  * PHP: fpdf, tcpdf, mPDF
+  * ...
+
+* Support for PDF in Ruby
+
+  * **pdf-reader**: can read PDFs but not write them
+  * **prawn**: can create PDFs but has only basic reading support
+  * origami: PDF read/write support, intended for auditing PDFs
+  * combinepdf: basic PDF read/write functionality
+
+
+
+## Features of HexaPDF {#features}
+
+Goal: *One library for creating, manipulating, merging, extracting data from, securing and optimizing
+PDF files*.
+
+* Implements most of the PDF 1.7 standard in regards to reading/writing:
+
+  * Cross-reference streams and object streams
+  * Filters: ASCIIHex, ASCII85, LZW, RunLength, Flate, DCT (passthrough)
+  * All password based encryption mechanisms (including PDF 2.0 compatible AES256 method)
+
+  → Throw a valid PDF at HexaPDF and it can handle it
+
+* PDF internal objects are represented as Ruby objects for easy manipulation
+
+  * Semi-automatic PDF object type detection (i.e. using the best class for a certain PDF object)
+  * Easily extendable without modifying core classes
+
+
+
+## Examples {#examples}
+
+1. Read, compress and write a PDF:
+
+   ~~~ ruby
+   HexaPDF::PDF::Document.open(ARGV.shift) do |doc|
+     doc.task(:optimize, compact: true, object_streams: :generate)
+     doc.write(ARGV.shift, validate: true)
+   end
+   ~~~
+
+2. Merge two (or more) PDFs:
+
+   ~~~ ruby
+   target = HexaPDF::PDF::Document.new
+   output_name = ARGV.shift
+   ARGV.each do |file|
+     pdf = HexaPDF::PDF::Document.new(io: File.open(file, 'rb'))
+     pdf.pages.each_page {|page| target.pages.add_page(target.import(page))}
+   end
+   target.write(output_name)
+   ~~~
+
+3. Graphics support (<https://gist.github.com/gettalong/7c72149ee84ea9d01b61>)
+
+
+<!--
+## PDF Creation {#creation}
+
+* Supports the base PDF graphics objects: lines, bezier curves, images, form XObjects.
+
+* Can embed images: PNG (lossless), JPG (lossy), PDF (vector graphics)
+
+* Insert pages from other PDFs or use a PDF page as a template
+
+* No support for text, yet
+-->
+
+
+## Performance {#performance}
+
+* Good performance and low memory usage
+
+* Even better performance if StringScanner would natively support reading integers, floats and
+  symbols (currently a throw-away string needs to be created)
+
+* Comparison for read-compress-write (full output see <https://gist.github.com/gettalong/8955ff5403fe7abb7bee>)
+
+  ~~~
+  | a.pdf                |     Time |     Memory |   File size |        | c.pdf                |     Time |     Memory |   File size |
+  |------------------------------------------------------------|        |------------------------------------------------------------|
+  | hexapdf              |     87ms |  14.012KiB |      49.188 |        | hexapdf              |  1.909ms |  45.268KiB |  13.229.244 |
+  | hexapdf -cp          |    113ms |  14.540KiB |      48.252 |        | hexapdf -cp          | 10.086ms | 101.128KiB |  13.136.319 |
+  | origami              |    309ms |  26.116KiB |      52.313 |        | origami              |  8.386ms | 173.236KiB |  14.338.620 |
+  | pdftk                |     40ms |  53.336KiB |      53.144 |        | pdftk                |  1.643ms | 100.656KiB |  14.439.611 |
+  | qpdf-comp            |     11ms |   4.276KiB |      49.287 |        | qpdf-comp            |  2.246ms |  36.648KiB |  13.228.102 |
+  | smpdf                |     16ms |   8.124KiB |      48.329 |        | smpdf                |  3.169ms |  75.768KiB |  13.076.598 |
+  
+  
+  | d.pdf                |     Time |     Memory |   File size |        | e.pdf                |     Time |     Memory |   File size |
+  |------------------------------------------------------------|        |------------------------------------------------------------|
+  | hexapdf              |  7.674ms |  98.592KiB |   6.784.251 |        | hexapdf              |  1.006ms |  46.960KiB |  21.770.465 |
+  | hexapdf -cp          |  5.997ms | 102.812KiB |   5.532.779 |        | hexapdf -cp          | 35.707ms | 190.528KiB |  21.197.170 |
+  | origami              | 22.835ms | 192.256KiB |   7.499.292 |        | origami              |  3.301ms | 153.628KiB |  21.796.847 |
+  | pdftk                |  2.281ms | 102.584KiB |   7.279.035 |        | pdftk                |    681ms | 123.152KiB |  21.874.883 |
+  | qpdf-comp            |  3.224ms |  45.836KiB |   6.703.374 |        | qpdf-comp            |  1.517ms |  65.172KiB |  21.787.558 |
+  | smpdf                |  2.803ms |  80.416KiB |   5.528.352 |        | smpdf                | 37.539ms | 647.440KiB |  21.188.516 |
+  ~~~
+  {: .small style="font-size: 30% !important"}
+
+
+
+## Future {#future}
+
+* Support for various font formats (Type1, CFF, TTF, OpenType)
+
+* Showing text on a page in addition to graphics
+
+* Nicer methods for modifying the PDF object tree
+
+Caveat: Code of HexaPDF **not released yet** but soon
+{: style="text-align: center; margin-top: 2em"}
+
+
+## Thanks! {#thanks}
+
+<div style="margin-top: 4em; color: #666; text-align: center" markdown="1">
+For questions regarding HexaPDF
+
+[t_leitner@gmx.at](mailto:t_leitner@gmx.at)  
+[https://gitter.im/gettalong/hexapdf](https://gitter.im/gettalong/hexapdf)
+</div>

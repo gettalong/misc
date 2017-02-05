@@ -1,0 +1,5 @@
+--- paths
+/*.page:
+  versions:
+    default:
+      template: slides.template
