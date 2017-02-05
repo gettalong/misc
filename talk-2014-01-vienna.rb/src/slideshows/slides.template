@@ -1,0 +1,60 @@
+---
+template: ~
+---
+<!doctype html>
+<html lang="{lang:}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>{title:}</title>
+
+    <meta name="generator" content="webgen" />
+    <meta name="author" content="Thomas Leitner" />
+
+    <link rel="stylesheet" href="{relocatable: slides.css}" />
+  </head>
+  <body>
+    <div id="blank" style="background-color: black; position: fixed; width: 100%; height: 100%; z-index: 1; display: none"></div>
+    <div id="impress" data-max-scale="2">
+      <%
+      content = context.render_block('content')
+      content.gsub!(/<h[12].*?id="(.*?)"(?:.*?class="(.*?)")?.*?(?=<h2|h1|<div|\z)/m) do |match|
+        id, klass = $1, $2
+        "<div id='slide-#{id}' class='step #{klass}'>#{match.sub(/class="#{klass}"/, '')}</div>"
+      end
+      %>
+      <%= content %>
+      <div id="slide-ueberblick" class="step"></div>
+    </div>
+    <script src="{relocatable: impress.js}"></script>
+    <script>
+    var steps = <%= context.node['steps'].to_json %>;
+    for (var key in steps) {
+      if (el = document.getElementById("slide-"+key)) {
+        for (var attr in steps[key]) {
+          el.dataset[attr] = steps[key][attr];
+        }
+      }
+    }
+    var blanked_element = null;
+    document.addEventListener("keyup", function (event) {
+      if ( event.keyCode === 66 ) {
+        el = document.getElementById("blank")
+        if (el.style.display != 'none') {
+          window.location.hash = "#/" + blanked_element;
+          el.style.display = 'none';
+        } else {
+          blanked_element = window.location.hash.replace(/^#\/?/, "")
+          el.style.display = '';
+        }
+        event.preventDefault();
+      } else if ( event.keyCode === 79 ) {
+        window.location.hash = "#slide-ueberblick";
+        event.preventDefault();
+      }
+    }, false);
+    impress().init();
+    </script>
+  </body>
+</html>

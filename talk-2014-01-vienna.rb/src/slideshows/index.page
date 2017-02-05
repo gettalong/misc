@@ -1,0 +1,18 @@
+---
+title: Slides
+in_menu: true
+sort_info: 4
+---
+
+## Available Slideshows
+
+<%
+options = {:alcn => '**/*.html', :not => {:alcn => 'index.en.html'}, :flatten => true, :sort => 'modified_at', :mi => {'version' => 'slides'}}
+context.website.ext.item_tracker.add(context.dest_node, :nodes, :node_finder_option_set, {:opts => options, :ref_alcn => context.node.alcn}, :meta_info)
+context.website.ext.node_finder.find(options, context.node).each do |node|
+versions = node.versions
+%>
+* [<%= node['title'] %>](<%= node.alcn %>)
+  ([HTML print version](<%= versions['default'].alcn %>), [PDF version](<%= versions['pdf'].alcn %>)) \\
+  Last modified <%= node['modified_at'].strftime("%Y-%m-%d %H:%M") %>
+<% end %>

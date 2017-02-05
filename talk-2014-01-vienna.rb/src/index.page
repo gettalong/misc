@@ -1,0 +1,6 @@
+---
+title: User group for Viennese rubyists
+template: /default.template
+---
+
+{menu: {options: {alcn: /blog/*.en.html, sort: created_at, reverse: true, limit: 5}, template: /blog/blog-index.template, tracking_style: content}}

@@ -1,0 +1,4 @@
+--- paths
+
+'**/*.page':
+  dest_path: <parent><year>/<month>/<day>/<basename>(-<version>)(.<lang>)<ext>

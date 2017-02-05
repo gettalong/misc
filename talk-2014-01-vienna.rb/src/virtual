@@ -1,0 +1,11 @@
+/twitter.html:
+  title: Twitter
+  dest_path: https://twitter.com/viennarb
+  in_menu: true
+  sort_info: 5
+
+/meetup.html:
+  title: Meetup
+  dest_path: http://www.meetup.com/vienna-rb/
+  in_menu: true
+  sort_info: 7

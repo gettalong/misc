@@ -1,0 +1,43 @@
+.step {
+
+    font-size: 32px;
+
+    h2 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 48px;
+        margin-bottom: 1em;
+
+        &:before {
+            content: "     ";
+            white-space: pre;
+            background: left center / 48px 48px no-repeat url("viennarb_logo.png");
+        }
+    }
+}
+
+#slide-title {
+
+    background: center top / 100px 100px no-repeat url("viennarb_logo.png");
+    text-align: center;
+    padding-top: 120px;
+
+    h2 {
+        &:before {
+            white-space: inherit;
+        }
+        em:before {
+            content: "\a";
+            white-space: pre;
+        }
+    }
+
+    h2+p {
+        margin-top: 3em;
+    }
+
+    p {
+        font-size: normal;
+    }
+}
+

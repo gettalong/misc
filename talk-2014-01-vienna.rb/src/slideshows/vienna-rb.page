@@ -1,0 +1,129 @@
+---
+title: Static website generation with webgen and kramdown
+steps:
+  title: {x: 0, y: 0, scale: 2}
+  motivation: {x: 0, y: -1500, rotate: -90}
+  history: {x: 1172, y: -935, rotate: -39}
+  principles: {x: 1462, y: 333, rotate: 13}
+  features: {x: 650, y: 1351, rotate: 64}
+  demo: {x: -650, y: 1351, rotate: 115}
+  future: {x: -1462, y: 333, rotate: 167}
+  thanks: {x: -1172, y: -935, rotate: 218}
+  ueberblick: {x: 0, y: 0, scale: 5}
+---
+
+## Static Website Generation with *webgen and kramdown* {#title}
+
+by Thomas Leitner a.k.a gettalong
+{: style="text-align: center"}
+
+
+
+## Motivation {#motivation}
+
+* Need for a static personal website back in 2003
+
+* Not many tools around (now there are [hundreds](http://staticsitegenerators.net/))
+
+* webgen first XML/XSLT, than Ruby based
+
+
+
+## History {#history}
+
+* First release in July 2004
+
+* Development slowed down in 2009, latest 0.5.x release in 2010 → Why? → kramdown!
+
+* Most features and principles already present in 0.1.0
+
+* Each minor version a complete overhaul code-wise
+
+
+
+## Basic Principles {#principles}
+
+* Written for **end users**, not programmers
+
+* ~~~
+  ---
+  title: Some title
+  in_menu: true
+  ---
+  First block named content
+
+  --- name:other
+  Second, explicitly named block
+  ~~~
+  {: style="float: right; margin-right: -120px"}
+
+  *[Webgen Page Format]* - file format for all custom files
+
+  - Easy to use and understand
+  - Optional YAML meta information block on top
+  - Multiple (named) content blocks
+
+* Customization through special meta information keys
+
+* Easily extendable/customizable (even built-in extensions on a per website basis)
+
+* No global state, everything encapsulated in objects
+
+[Webgen Page Format]: http://webgen.gettalong.org/documentation/reference/webgen_page_format.html
+
+
+
+## Main Features {#features}
+
+* Fast (or reasonably so)
+
+* **Partial site generation** by tracking of needed information
+
+* Multiple markup languages/template engines (Markdown, Textile, RDoc, builder, ERB, Haml, Sass,
+  ...)
+
+* Easy dynamic content through **webgen tags**
+
+* Incorporation of external resources through **virtual files/directories**
+
+* **Relative links**, no web server needed for viewing!
+
+
+
+## Demo {#demo}
+
+* Live demo showing basic usage of webgen
+
+* Sample site at
+
+  <https://github.com/gettalong/vienna.rb-2014-01-09>
+
+  showcases kramdown, ERB, custom content processor for PDF generation, multilingual pages, meta
+  information files, virtual files, tipue_search bundle integration.
+
+
+## Future {#future}
+
+* Mostly bug fixes and small enhancements for both webgen and kramdown
+
+* kramdown will use Prawn 1.0.0 once it is released in the coming months
+
+* kramdown 2.0.0 will need at least Ruby 2.0.0
+
+
+## Thanks! {#thanks}
+
+Questions? Comments?
+{: style="text-align: center"}
+
+&nbsp;
+
+Slides available at\\
+<https://github.com/gettalong/vienna.rb-2014-01-09/tree/master/src/slideshows/vienna-rb.page>
+{: style="text-align: center"}
+
+<%
+if context.node['version'] == 'slides'
+  context.html_head.link_file(:css, 'vienna-rb/style.css')
+end
+%>

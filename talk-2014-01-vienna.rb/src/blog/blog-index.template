@@ -1,0 +1,4 @@
+--- name:tag.menu pipeline:ruby
+context.content = context[:nodes].map do |node|
+  context.render_block(:name => 'content', :chain => [context.node.resolve('/blog/article.template'), node])
+end.join("")

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="{lang:}" class="maskImage">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>{title: } - Sample Site</title>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1" />
+
+    <link href="{relocatable: img/favicon.png}" rel="icon" />
+    <link href="{relocatable: css/screen.css}" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+    <link href="{relocatable: atom.xml}" rel="alternate" title="User group for Viennese rubyists" type="application/atom+xml">
+
+    <script type="text/javascript" src="{relocatable: js/jquery.min.js}"></script>
+  </head>
+
+  <body class="collapse-sidebar sidebar-footer">
+    <header role="banner">
+      <hgroup>
+        <h1><a href="{relocatable: /}">User group for Viennese rubyists</a></h1>
+        <h2>organizing meetups for Ruby and Rails developers in and around Vienna, Austria.</h2>
+      </hgroup>
+    </header>
+
+    <nav role="navigation">
+      <ul class="subscription" data-subscription="rss">
+        <li><a href="{relocatable: atom.xml}" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+      </ul>
+
+      <fieldset role="search">
+        {tipue_search: {path: data.js, options: {mode: static, liveDescription: '#content'}, entries: {alcn: /**/*.html}, template: tipue_search.template}}
+      </fieldset>
+
+      <fieldset class="mobile-nav">
+        <select>
+          <option value="">Navigate…</option>
+          {menu: {options: {mi: {in_menu: true}, flatten: true, lang: [node, null], sort: true}, template: mobile-nav.template}}
+        </select>
+      </fieldset>
+      {menu: {options: {mi: {in_menu: true}, flatten: true, lang: [node, null], sort: true}, css_class: main-navigation}}
+
+    </nav>
+    <div class="langbar">{langbar: {show_single_lang: false}}</div>
+
+    <div id="tipue_search_content"></div>
+
+    <div id="main">
+      <div id="content">
+        <div class="blog-index">
+
+          <webgen:block name="content" />
+
+          <div class="pagination">
+            <a href="http://vienna-rb.at/blog/archives">Blog Archives</a>
+          </div>
+
+        </div>
+
+        <aside class="sidebar">
+        </aside>
+
+      </div>
+    </div>
+
+    <footer role="contentinfo">
+      <p>Copyright © 2013 - vienna.rb team -
+        <span class="credit">Powered by <a href="http://webgen.gettalong.org/">webgen</a></span>
+      </p>
+    </footer>
+
+  </body>
+</html>

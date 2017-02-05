@@ -1,0 +1,5 @@
+--- name:tag.menu pipeline:ruby
+context.content = context[:nodes].map do |node|
+  link = context.dest_node.route_to(node)
+  "<option value=\"#{link}\">» #{node['title']}</option>"
+end.join("")

@@ -1,0 +1,30 @@
+--- paths
+/**/*.page:
+  template: /blog/article.template
+
+/**/*.pdftemplate:
+  handler: template
+
+/slideshows/**/*.page:
+  versions:
+    default:
+    slides:
+      template: /slideshows/slides.template
+    pdf:
+      cn: <basename>.pdf
+      dest_path: <parent><basename>(.<lang>).pdf
+      template: ~
+      pdf-template: /slideshows/slides.pdftemplate
+      blocks:
+        content:
+          pipeline: erb,tags,blocks,pdf
+
+/slideshows/index.page:
+  versions:
+    default:
+
+--- alcn
+/:
+  title: Blog
+  in_menu: true
+  sort_info: 1

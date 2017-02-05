@@ -1,0 +1,7 @@
+--- name:tag.tipue_search pipeline:erb
+<input type="text" placeholder="Search" class="search" id="tipue_search_input" />
+<script>
+$(document).ready(function() {
+     $('#tipue_search_input').tipuesearch(<%= JSON.dump(context[:config]['tag.tipue_search.options']) %>);
+});
+</script>

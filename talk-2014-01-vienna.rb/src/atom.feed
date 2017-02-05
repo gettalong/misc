@@ -1,0 +1,12 @@
+---
+versions:
+  atom:
+    dest_path: <parent><basename>(.lang).xml
+    cn: <basename>.xml
+entries:
+  alcn: '/blog/*.html'
+  sort: created_at
+  flatten: true
+author: Thomas Leitner
+author_url: http://me.gettalong.org
+---

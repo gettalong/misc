@@ -1,0 +1,214 @@
+/*
+  So you like the style of impress.js demo?
+  Or maybe you are just curious how it was done?
+
+  You couldn't find a better place to find out!
+
+  Welcome to the stylesheet impress.js demo presentation.
+
+  Please remember that it is not meant to be a part of impress.js and is
+  not required by impress.js.
+  I expect that anyone creating a presentation for impress.js would create
+  their own set of styles.
+
+  But feel free to read through it and learn how to get the most of what
+  impress.js provides.
+
+  And let me be your guide.
+
+  Shall we begin?
+  */
+
+
+/*
+   We start with a good ol' reset.
+   That's the one by Eric Meyer http://meyerweb.com/eric/tools/css/reset/
+
+   You can probably argue if it is needed here, or not, but for sure it
+   doesn't do any harm and gives us a fresh start.
+   */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+blockquote, q {
+    quotes: "«" "»";
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/*
+  Now here is when interesting things start to appear.
+
+  We set up <body> styles with default font and nice gradient in the background.
+  And yes, there is a lot of repetition there because of -prefixes but we don't
+  want to leave anybody behind.
+  */
+body {
+    font-family: 'PT Sans', sans-serif;
+    min-height: 740px;
+
+    background: rgb(204, 204, 204);
+    background: radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+}
+
+/*
+  Now let's bring some text styles back ...
+  */
+b, strong { font-weight: bold }
+i, em { font-style: italic }
+p { margin-bottom: 0.3em }
+ul, ol { padding-left: 1.5em; margin-bottom: 1em; }
+
+pre, code {
+    font-family: monospace;
+    background: #333;
+    color: #eee;
+}
+pre {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 24px;
+}
+code {
+    border-radius: 3px;
+}
+
+kbd {
+    font-weight: bold;
+}
+.prompt {
+    color: #888;
+}
+
+sup {
+    vertical-align: super;
+    font-size: 80%;
+}
+
+/*
+  ... and give links a nice look.
+  */
+a {
+    color: inherit;
+    text-decoration: none;
+    padding: 0 0.1em;
+    background: rgba(255,255,255,0.5);
+    text-shadow: -1px -1px 2px rgba(100,100,100,0.9);
+    border-radius: 0.2em;
+
+    transition:         0.5s;
+}
+
+a:hover,
+a:focus {
+    background: rgba(255,255,255,1);
+    text-shadow: -1px -1px 2px rgba(100,100,100,0.5);
+}
+
+.step {
+    position: relative;
+    width: 1000px;
+    padding: 40px;
+    margin: 20px auto;
+
+    box-sizing: border-box;
+
+    font-family: 'PT Serif', georgia, serif;
+    font-size: 48px;
+    line-height: 1.5;
+
+    counter-increment: steps total;
+}
+
+/*
+  ... and we enhance the styles for impress.js.
+
+  Basically we remove the margin and make inactive steps a little bit transparent.
+  */
+.impress-enabled .step {
+    margin: 0;
+    opacity: 0.1;
+
+    transition:         opacity 1s;
+}
+
+.impress-enabled .step.active { opacity: 1 }
+
+.pos-bottom {
+    position: absolute;
+    bottom: 20px;
+}
+
+.pos-right {
+    position: absolute;
+    right: 20px;
+}
+
+
+#slide-ueberblick { display: none }
+
+.impress-on-slide-ueberblick .step {
+    opacity: 1;
+    cursor: pointer;
+}
+
+
+
+/*
+  And as the last thing there is a workaround for quite strange bug.
+  It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
+
+  Sometimes the element positioned in 3D (especially when it's moved back
+  along Z axis) is not clickable, because it falls 'behind' the <body>
+  element.
+
+  To prevent this, I decided to make <body> non clickable by setting
+  pointer-events property to `none` value.
+  Value if this property is inherited, so to make everything else clickable
+  I bring it back on the #impress element.
+
+  If you want to know more about `pointer-events` here are some docs:
+  https://developer.mozilla.org/en/CSS/pointer-events
+
+  There is one very important thing to notice about this workaround - it makes
+  everything 'unclickable' except what's in #impress element.
+
+  So use it wisely ... or don't use at all.
+  */
+.impress-enabled          { pointer-events: none }
+.impress-enabled #impress { pointer-events: auto }

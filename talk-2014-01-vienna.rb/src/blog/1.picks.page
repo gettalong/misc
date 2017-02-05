@@ -1,0 +1,23 @@
+---
+title: What I want to share this week
+created_at: 2014-09-01 18:00:00 +01:00
+---
+
+### My Picks
+
+Here are some of the things I want to share this week:
+
+[Thomas]:
+
+* [Static website generation with webgen and kramdown][1] - A talk about a static website generation
+  program, have a look at it!
+
+* [webgen] - A very good static website generator
+
+* [kramdown] - Pure Ruby Markdown + extras implementation, highly recommended!
+
+
+[Thomas]: http://twitter.com/_gettalong
+[1]: http://github.com/vienna-rb/slides
+[webgen]: http://webgen.gettalong.org
+[kramdown]: http://kramdown.gettalong.org

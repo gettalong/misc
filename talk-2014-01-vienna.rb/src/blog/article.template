@@ -1,0 +1,18 @@
+<article>
+  <header>
+    <h1 class="entry-title"><a href="<%= context.tag('relocatable', context.node.alcn) %>">{title:}</a></h1>
+    <% if context.node['created_at'] %>
+    <p class="meta">
+      <time datetime="<%= context.node['created_at'].strftime("%FT%T%:z") %>" pubdate="pubdate"><%= context.node['created_at'].strftime("%F %R") %></time>
+    </p>
+    <% end %>
+  </header>
+
+  <div class="entry-content">
+
+    <webgen:block name="content" />
+
+  </div>
+
+</article>
+
