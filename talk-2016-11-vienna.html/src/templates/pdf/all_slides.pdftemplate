@@ -1,0 +1,47 @@
+# -*- mode: ruby, coding: utf-8 -*-
+# <%
+
+eval(@converter.options[:context].node.resolve('/templates/pdf/slides.pdftemplate').blocks['content'])
+
+class << @converter
+
+  def render_header(el, opts)
+    if el.attr['class'] =~ /\bslide-title\b/
+      @pdf.start_new_page
+      print_slide_header(@pdf, el.attr['data-index'], el.attr['data-title'])
+    elsif @pdf.cursor < 72
+      @pdf.start_new_page
+      super
+    else
+      super
+    end
+  end
+
+  def setup_document(root)
+    @context = @options[:context]
+    @mtime = @context.node.node_info[:real_mtime].strftime('%Y-%m-%d %H:%M')
+    @master_document = true
+
+    doc = super(root)
+    register_fonts(doc)
+    print_first_page(doc)
+    setup_footer(doc)
+    doc
+  end
+
+  def print_first_page(doc)
+    doc.move_down(96)
+    doc.formatted_text([{:text => @context.node['course'], :font => 'sans',
+                         :size => 24, :styles => [:bold]}], :align => :center)
+    doc.move_down(24)
+    doc.formatted_text([{:text => "Thomas Leitner <t_leitner@gmx.at>\n" +
+                          "Some Affiliation",
+                          :font => 'sans', :size => 12}], :align => :center)
+    doc.move_down(24)
+    doc.formatted_text([{:text => "Last Changes: #{@mtime}", :font => 'sans',
+                          :size => 10}], :align => :center)
+  end
+
+end
+
+# %>

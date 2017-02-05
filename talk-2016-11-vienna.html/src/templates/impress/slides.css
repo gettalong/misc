@@ -1,0 +1,381 @@
+/*
+  So you like the style of impress.js demo?
+  Or maybe you are just curious how it was done?
+
+  You couldn't find a better place to find out!
+
+  Welcome to the stylesheet impress.js demo presentation.
+
+  Please remember that it is not meant to be a part of impress.js and is
+  not required by impress.js.
+  I expect that anyone creating a presentation for impress.js would create
+  their own set of styles.
+
+  But feel free to read through it and learn how to get the most of what
+  impress.js provides.
+
+  And let me be your guide.
+
+  Shall we begin?
+  */
+
+
+/*
+   We start with a good ol' reset.
+   That's the one by Eric Meyer http://meyerweb.com/eric/tools/css/reset/
+
+   You can probably argue if it is needed here, or not, but for sure it
+   doesn't do any harm and gives us a fresh start.
+   */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+blockquote, q {
+    quotes: "«" "»";
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/*
+  Now here is when interesting things start to appear.
+
+  We set up <body> styles with default font and nice gradient in the background.
+  And yes, there is a lot of repetition there because of -prefixes but we don't
+  want to leave anybody behind.
+  */
+body {
+    font-family: 'PT Sans', sans-serif;
+    min-height: 740px;
+
+    background: rgb(204, 204, 204);
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+    background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+}
+
+/*
+  Now let's bring some text styles back ...
+  */
+b, strong { font-weight: bold }
+i, em { font-style: italic }
+p { margin-bottom: 0.3em }
+ul, ol { padding-left: 1.5em; }
+dl {
+    margin-bottom: 1em;
+    position: relative;
+}
+dt {
+    background-color: #069;
+    color: white;
+    padding-left: 0.5em;
+}
+dd {
+    padding-left: 1.5em;
+    margin-left: 0;
+}
+dd + dt {
+    margin-top: 1em;
+}
+dd:before {
+    position: absolute;
+    left: 0.5em;
+    content: "»";
+}
+pre, code {
+    font-family: monospace;
+    background: #ccc;
+}
+
+kbd {
+    font-weight: bold;
+}
+.prompt {
+    color: #888;
+}
+
+blockquote {
+    border-left: 2px solid #069;
+    font-style: italic;
+    padding: 0.3em;
+    padding-left: 1em;
+    margin: 1em;
+    background-color: #ccc;
+}
+
+table {
+    border: 1px solid #069;
+    width: 100%;
+    margin: auto;
+}
+
+table th {
+    background-color: #069;
+    color: white;
+}
+
+table th, table td {
+    border-collapse: collapse;
+    border: 1px solid #069;
+    padding: 5px;
+}
+sup {
+    vertical-align: super;
+    font-size: 80%;
+}
+
+/*
+  ... and give links a nice look.
+  */
+a {
+    color: inherit;
+    text-decoration: none;
+    padding: 0 0.1em;
+    background: rgba(255,255,255,0.5);
+    text-shadow: -1px -1px 2px rgba(100,100,100,0.9);
+    border-radius: 0.2em;
+
+    -webkit-transition: 0.5s;
+    -moz-transition:    0.5s;
+    -ms-transition:     0.5s;
+    -o-transition:      0.5s;
+    transition:         0.5s;
+}
+
+a:hover,
+a:focus {
+    background: rgba(255,255,255,1);
+    text-shadow: -1px -1px 2px rgba(100,100,100,0.5);
+}
+
+.step {
+    position: relative;
+    width: 900px;
+    padding: 40px;
+    margin: 20px auto;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    -ms-box-sizing:     border-box;
+    -o-box-sizing:      border-box;
+    box-sizing:         border-box;
+
+    font-family: 'PT Serif', georgia, serif;
+    font-size: 48px;
+    line-height: 1.5;
+
+    counter-increment: steps total;
+}
+
+/*
+  ... and we enhance the styles for impress.js.
+
+  Basically we remove the margin and make inactive steps a little bit transparent.
+  */
+.impress-enabled .step {
+    margin: 0;
+    opacity: 0.2;
+
+    -webkit-transition: opacity 1s;
+    -moz-transition:    opacity 1s;
+    -ms-transition:     opacity 1s;
+    -o-transition:      opacity 1s;
+    transition:         opacity 1s;
+}
+
+.impress-enabled .step.active { opacity: 1 }
+
+/*
+  These 'slide' step styles were heavily inspired by HTML5 Slides:
+  http://html5slides.googlecode.com/svn/trunk/styles.css
+
+  ;)
+
+  They cover everything what you see on first three steps of the demo.
+  */
+.slide {
+    display: block;
+
+    width: 1000px;
+    height: 700px;
+    padding: 40px 40px;
+
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, .3);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+
+    color: rgb(102, 102, 102);
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 24px;
+    line-height: 36px;
+/*    letter-spacing: -1px; */
+    position: relative;
+}
+
+.slide h1{
+    position: relative;
+    top: -40px;
+    left: -40px;
+    margin-right: -80px;
+    padding: 20px;
+    margin-bottom: -20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: white;
+    font-size: 36px;
+    text-align: center;
+    background-color: #069;
+}
+
+.slide h1:after {
+    content: counter(steps);
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 20px;
+}
+
+.slide pre {
+    font-size: 16px;
+    line-height: 1.4;
+    margin-bottom: 1em;
+}
+
+.slide code {
+    font-size: 22px;
+}
+
+.slide pre code {
+    font-size: 16px;
+}
+
+.slide hr {
+    border: 0;
+    background-color: #ccc;
+    height: 2px;
+}
+
+
+.pos-bottom {
+    position: absolute;
+    bottom: 20px;
+}
+
+.pos-right {
+    position: absolute;
+    right: 20px;
+}
+
+
+
+
+/* Special style for certain slide */
+#slide-title h2 {
+    font-weight: bold;
+    font-size: 48px;
+    text-align: center;
+    margin: 2em 0;
+}
+
+#slide-title .author {
+    text-align: center;
+    color: #999;
+}
+
+#slide-title .last-change {
+    font-size: medium;
+}
+
+#slide-overview { display: none }
+
+.impress-on-slide-overview .step {
+    opacity: 1;
+    cursor: pointer;
+}
+
+
+.slide q {
+    display: block;
+    font-size: 50px;
+    line-height: 72px;
+
+    margin-top: 100px;
+}
+
+.slide q strong {
+    white-space: nowrap;
+}
+
+
+#title {
+    padding: 0;
+}
+
+#title .try {
+    font-size: 64px;
+    position: absolute;
+    top: -0.5em;
+    left: 1.5em;
+
+    -webkit-transform: translateZ(20px);
+    -moz-transform:    translateZ(20px);
+    -ms-transform:     translateZ(20px);
+    -o-transform:      translateZ(20px);
+    transform:         translateZ(20px);
+}
+
+#title h1 {
+    font-size: 190px;
+
+    -webkit-transform: translateZ(50px);
+    -moz-transform:    translateZ(50px);
+    -ms-transform:     translateZ(50px);
+    -o-transform:      translateZ(50px);
+    transform:         translateZ(50px);
+}
+
+#title .footnote {
+    font-size: 32px;
+}
+

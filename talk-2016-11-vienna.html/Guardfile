@@ -1,0 +1,4 @@
+guard 'livereload' do
+  extensions = [:css, :js, :html, :png, :gif, :jpg, :jpeg]
+  watch(%r{out/.+\.(#{extensions.join('|')})})
+end

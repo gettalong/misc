@@ -1,0 +1,11 @@
+<div class="title">
+  <h1>{course:}</h1>
+  <h2>{index:}. {title:}</h2>
+
+  <div class="author">
+    <p>Thomas Leitner<br />
+    <br />
+    <span class="last-change">Last Change: {modified_at:}</span>
+    </p>
+  </div>
+</div>

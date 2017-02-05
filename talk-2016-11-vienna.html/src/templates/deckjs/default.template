@@ -1,0 +1,70 @@
+---
+template: ~
+--- pipeline:tags,blocks
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Using Markdown with the kramdown Library and Tools</title>
+
+  <!-- Required stylesheet -->
+  <link rel="stylesheet" media="screen" href="{relocatable: deckjs/core/deck.core.css}">
+
+  <!-- Extension CSS files go here. Remove or add as needed. -->
+  <link rel="stylesheet" media="screen" href="{relocatable: deckjs/extensions/status/deck.status.css}">
+  <link rel="stylesheet" media="screen" href="{relocatable: deckjs/extensions/clone/deck.clone.css}">
+  <link rel="stylesheet" media="screen" href="{relocatable: deckjs/extensions/timekeeper/deck.timekeeper.css}">
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="{relocatable: normalize.css}">
+  <link rel="stylesheet" media="screen" href="{relocatable: style.css}">
+
+  <!-- Basic black and white print styles -->
+  <link rel="stylesheet" media="print" href="{relocatable: deckjs/core/print.css}">
+
+  <!-- Required Modernizr file -->
+  <script src="{relocatable: deckjs/modernizr.custom.js}"></script>
+</head>
+<body>
+  <div class="deck-container">
+
+    <!-- Begin slides. -->
+
+    <webgen:block name="content" />
+
+    <!-- End slides. -->
+
+    <!-- Begin extension snippets. -->
+
+    <!-- deck.status snippet -->
+    <p class="deck-status" aria-role="status">
+      <span class="deck-status-current"></span>
+      /
+      <span class="deck-status-total"></span>
+    </p>
+
+    <!-- End extension snippets. -->
+  </div>
+
+<!-- Required JS files. -->
+<script src="{relocatable: deckjs/jquery.min.js}"></script>
+<script src="{relocatable: deckjs/core/deck.core.js}"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="{relocatable: deckjs/extensions/menu/deck.menu.js}"></script>
+<script src="{relocatable: deckjs/extensions/status/deck.status.js}"></script>
+<script src="{relocatable: deckjs/extensions/events/deck.events.js}"></script>
+<script src="{relocatable: deckjs/extensions/step/deck.step.js}"></script>
+<script src="{relocatable: deckjs/extensions/anim/deck.anim.js}"></script>
+<script src="{relocatable: deckjs/extensions/clone/deck.clone.js}"></script>
+<script src="{relocatable: deckjs/extensions/timekeeper/deck.timekeeper.js}"></script>
+<script src="{relocatable: deckjs/extensions/scale/deck.scale.js}"></script>
+
+<script>
+  $(function() {
+    $.deck('.slide', \{fitFollowsClone: false});
+  });
+</script>
+</body>
+</html>

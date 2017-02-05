@@ -1,0 +1,62 @@
+---
+title: Creating Course Slides
+index: 1
+steps:
+  title: {x: 0, y: 0}
+  screating: {x: 0, y: 900}
+  singredients: {x: 0, y: 1800}
+  swebgen: {x: 1200, y: 00}
+  skramdown: {x: 1200, y: 900}
+  sprawn: {x: 1200, y: 1800}
+
+  overview: {x: 600, y: 900, scale: 5}
+---
+
+# Creating Course Slides {#screating}
+
+Thomas Leitner
+
+![github](github.png){: style="vertical-align: middle;background-color: #333"} @gettalong
+![twitter](twitter.png){: style="vertical-align: middle; margin-right: -8px" height="48px" height="48px"} @_gettalong 
+
+
+# The Ingredients {#singredients}
+
+* webgen
+
+* kramdown
+
+* prawn (and prawn-table, prawn-fast-png)
+
+
+# Static Website Generator `webgen` {#swebgen}
+
+* Meta information files for easy configuration of multiple input files
+
+* Ability to support multiple output files for a single input file (*version*)
+
+* Extension mechanism for defining the custom PDF content processor
+
+* Deep integration with kramdown
+
+* Template chaining
+
+
+# Markdown-superset Converter `kramdown` {#skramdown}
+
+* Does the actual hard work of converting our markup into an output format
+
+* Has a built-in experimental PDF converter based on the Prawn library
+
+* Customization of the PDF output by modifying the converter object
+
+
+# PDF Creation Library `prawn` {#sprawn}
+
+* The de-facto standard for creating PDFs in Ruby
+
+* Provides high-level facilities for text layout
+
+* Faster than shelling out to `wkhtmltopdf` and better output
+
+

@@ -1,0 +1,135 @@
+# -*- mode: ruby, coding: utf-8 -*-
+# <%
+
+require 'prawn/fast_png'
+
+class << @converter
+
+  def document_options(el)
+    super.merge(:margin => [mm2pt(20), mm2pt(20), mm2pt(25), mm2pt(20)])
+  end
+
+  def root_options(el, opts)
+    {:font => 'serif', :size => 9, :leading => 2, :align => :justify}
+  end
+
+  def header_options(el, opts)
+    result = super.merge(:font => 'sans')
+    result[:size] = case el.options[:level]
+                    when 1 then 14
+                    when 2 then 12
+                    else 9
+                    end
+    result
+  end
+
+  def codeblock_options(el, opts)
+    super.merge(:font => 'mono')
+  end
+
+  def codespan_options(el, opts)
+    super.merge(:font => 'mono')
+  end
+
+  def render_header(el, opts)
+    @pdf.start_new_page if @pdf.cursor < 72
+    super
+  end
+
+  def render_standalone_image(el, opts)
+    img = el.children.first
+    if img.attr['src'] !~ /\.jpe?g$|\.png$/
+      old_path = File.join(@options[:context].website.directory, 'src',
+                           @options[:context].ref_node.resolve(img.attr['src']).node_info[:path])
+      if img.attr['src'] =~ /\.svg$/
+        new_path = File.basename(img.attr['src'], '.svg') + '.png'
+        new_tmp_path = File.join(@options[:image_directories].last, new_path)
+        command = "inkscape -z -d 72 -e '#{new_tmp_path}' '#{old_path}'"
+      else
+        new_path = File.basename(img.attr['src'], '.*') + '.jpg'
+        new_tmp_path = File.join(@options[:image_directories].last, new_path)
+        command = "convert '#{old_path}' '#{new_tmp_path}'"
+      end
+      `#{command}` if !File.exist?(new_tmp_path) || File.mtime(old_path) > File.mtime(new_tmp_path)
+      img.attr['src'] = new_path
+    end
+    super(el, opts)
+  end
+
+  def render_codeblock(el, opts)
+    el.value.gsub!(/^ +/) {|m| Prawn::Text::NBSP * m.length}
+    super
+  end
+
+  def render_dd(el, opts)
+    @pdf.float { @pdf.indent(mm2pt(5)) { @pdf.formatted_text([text_hash("»", opts)]) } }
+    @pdf.indent(mm2pt(10)) { inner(el, opts) }
+  end
+
+  def setup_document(root)
+    @context = @options[:context]
+    @mtime = @context.node['modified_at'].strftime('%Y-%m-%d %H:%M')
+    @master_document = false
+
+    doc = super(root)
+    register_fonts(doc)
+    print_slide_header(doc, @context.node['index'], @context.node['title'])
+    setup_footer(doc)
+    doc
+  end
+
+  def print_slide_header(doc, index, title)
+    doc.formatted_text([{:text => "Slide #{index}", :font => 'sans',
+                         :size => 12, :styles => [:bold]}], :align => :right)
+    doc.stroke_horizontal_rule
+    doc.move_down(10)
+    doc.formatted_text([{:text => title, :font => 'sans',
+                         :size => 24, :styles => [:bold]}], :align => :right)
+    doc.move_down(72)
+  end
+
+  def setup_footer(doc)
+    doc.repeat(:all, :dynamic => true) do
+      next if @master_document && doc.page_number == 1
+      text = "Version: #{@mtime}"
+      page_numbers = "Page #{doc.page_number} of #{doc.page_count}"
+      text_options = {:font => 'serif', :size => 8, :color => 'aaaaaa'}
+      bounds = doc.bounds
+      doc.canvas do
+        doc.formatted_text_box([text_options.merge(:text => text)],
+                               :align => :left, :at => [bounds.absolute_left, mm2pt(15)])
+        doc.formatted_text_box([text_options.merge(:text => page_numbers, :styles => [:bold])],
+                               :align => :right, :at => [bounds.absolute_left, mm2pt(15)], :width => bounds.width)
+      end
+      doc.y = doc.bounds.absolute_top
+    end
+  end
+
+  def register_fonts(doc)
+    dejavu_path = File.expand_path("/usr/share/fonts/truetype/ttf-dejavu/")
+
+    doc.font_families["sans"] = {
+      :normal => "#{dejavu_path}/DejaVuSans.ttf",
+      :italic => "#{dejavu_path}/DejaVuSans-Oblique.ttf",
+      :bold => "#{dejavu_path}/DejaVuSans-Bold.ttf",
+      :bold_italic => "#{dejavu_path}/DejaVuSans-BoldOblique.ttf"
+    }
+
+    doc.font_families["mono"] = {
+      :normal => "#{dejavu_path}/DejaVuSansMono.ttf",
+      :italic => "#{dejavu_path}/DejaVuSansMono-Oblique.ttf",
+      :bold => "#{dejavu_path}/DejaVuSansMono-Bold.ttf",
+      :bold_italic => "#{dejavu_path}/DejaVuSansMono-BoldOblique.ttf"
+    }
+
+    doc.font_families["serif"] = {
+      :normal => "#{dejavu_path}/DejaVuSerif.ttf",
+      :italic => "#{dejavu_path}/DejaVuSerif-Italic.ttf",
+      :bold => "#{dejavu_path}/DejaVuSerif-Bold.ttf",
+      :bold_italic => "#{dejavu_path}/DejaVuSerif-BoldItalic.ttf"
+    }
+  end
+
+end
+
+# %>

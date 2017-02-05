@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{lang:}" lang="{lang:}">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="webgen - http://webgen.rubyforge.org" />
+    <link rel="stylesheet" type="text/css" href="{relocatable: templates/website/andreas07.css}" media="screen,projection" />
+    <title>{title:}</title>
+  </head>
+
+  <body>
+    <div id="wrap">
+
+      <div id="leftside">
+        <h1><a href="{relocatable: index.html}">Linux/macOS CLI</a></h1>
+        <h2>A small crash course</h2>
+
+        <div id="menu">
+          {menu: {options: {sort: 'index', alcn: /slides/*.html, mi: {version: print}, levels: 1}}}
+        </div>
+
+      </div>
+
+      <div id="content">
+        <webgen:block name="content" />
+      </div>
+
+    </div>
+  </body>
+</html>

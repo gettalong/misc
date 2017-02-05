@@ -1,0 +1,17 @@
+---
+title: Slide List
+---
+# Slide List
+
+<%
+options = {:alcn => 'slides/*.html', :flatten => true, :sort => 'index', :mi => {'version' => 'default'}}
+context.website.ext.item_tracker.add(context.dest_node, :nodes, :node_finder_option_set, {:opts => options, :ref_alcn => context.node.alcn}, :meta_info)
+context.website.ext.node_finder.find(options, context.node).each do |node|
+versions = node.versions
+%>
+* [<%= node['index'] %>. <%= node['title'] %>](<%= node.alcn %>)
+  ([HTML Print Version](<%= versions['print'].alcn %>), [PDF version](<%= versions['pdf'].alcn %>))
+<% end %>
+
+* [All slides in PDF](all_slides.pdf)
+

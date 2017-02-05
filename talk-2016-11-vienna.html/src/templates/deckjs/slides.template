@@ -1,0 +1,12 @@
+--- pipeline:erb
+<div id="slide-title" class="slide step">
+<%= context.render_block(:name => 'content', :chain => "/templates/title_slide.template;#{context.node.alcn}") %>
+</div>
+
+<%
+content = context.render_block('content')
+content.gsub!(/<h[12].*?id="(.*?)".*?(?=<h[12]|\z)/m) do |match|
+  "<section class='slide'><div>\n\n#{match}\n\n</div></section>\n\n"
+end
+%>
+<%= content %>

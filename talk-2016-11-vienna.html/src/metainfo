@@ -1,0 +1,43 @@
+--- paths
+[/**/*.pdf, /**/*.svg, /**/*.png]:
+  handler: copy
+
+/**/*.pdftemplate:
+  handler: template
+
+[/all_slides.page, /slides/*.page]:
+  course: Sample Course
+
+/slides/*.page:
+  versions:
+    default:
+      template: /templates/impress/slides.template
+    print:
+      template: /templates/print.template
+    pdf:
+      cn: <basename>.pdf
+      dest_path: <parent><basename>(.<lang>).pdf
+      pdf-template: /templates/pdf/slides.pdftemplate
+      template: ~
+      blocks:
+        content:
+          pipeline: erb,tags,blocks,pdf
+
+/slides/euruko2016.page:
+  versions:
+    default:
+      template: /templates/deckjs/slides.template
+    print:
+      template: /templates/print.template
+    pdf:
+      cn: <basename>.pdf
+      dest_path: <parent><basename>(.<lang>).pdf
+      pdf-template: /templates/pdf/slides.pdftemplate
+      template: ~
+      blocks:
+        content:
+          pipeline: erb,tags,blocks,pdf
+
+/templates/:
+  no_output: true
+

@@ -1,0 +1,3 @@
+<webgen:block name="content" chain="title_slide.template;<%= context.node.alcn %>" />
+
+<webgen:block name="content" />
