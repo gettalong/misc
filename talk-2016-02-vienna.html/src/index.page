@@ -1,0 +1,305 @@
+<section class="slide"><div class="center">
+# Using Markdown<br /> with the<br /> kramdown Library and Tools
+
+by Thomas Leitner
+
+a.k.a. gettalong
+</div></section>
+
+<section class="slide"><div class="center">
+## What is Markdown?
+
+{:.slide}
+Markdown is a *lightweight markup language*{:.hl}\\
+originally designed for conversion to HTML.
+</div></section>
+
+<section class="slide"><div>
+## Why Markdown?
+
+* {:.slide} HTML is very *verbose*{:.bad}
+* {:.slide} Textile is *unpleasant*{:.bad} to read
+* {:.slide} reStructuredText/AsciiDoc is *complex*{:.bad}
+</div></section>
+
+<section class="slide"><div>
+## Goals
+
+* {:.slide} Simplicity
+* {:.slide} Easy to read/write
+* {:.slide} HTML for everything more complex
+</div></section>
+
+<section class="slide"><div>
+## Markdown Syntax
+
+<pre>
+<span class="ex-header">##</span> Header like this
+
+This is <span class="ex-em">*</span>emphasized<span class="ex-em">*</span> and this <span class="ex-strong">**</span>strong<span class="ex-strong">**</span>! And <span class="ex-link">[</span>this is an
+inline link<span class="ex-link">](</span>http://kramdown.gettalong.org<span class="ex-link">)</span>. This whole
+thing is a paragraph.
+
+<span class="ex-blockquote">&gt;</span> Blockquotes are nice.
+And can be lazy.
+
+<span class="ex-codeblock">    </span>Code blocks are just indented chunks of text.
+
+<span class="ex-ulist">*</span> Unordered list
+<span class="ex-ulist">+</span> Can use different markers
+<span class="ex-ulist">-</span> Like we do here
+
+<span class="ex-olist">1.</span> Looks like an
+<span class="ex-olist">2.</span> ordered list,
+<span class="ex-olist">3.</span> at least to me!
+</pre>
+
+<div class="anim-addclass slide" data-what=".ex-header" data-class="ex"></div>
+<div class="anim-addclass slide" data-what=".ex-em" data-class="ex"></div>
+<div class="anim-addclass slide" data-what=".ex-strong" data-class="ex"></div>
+<div class="anim-addclass slide" data-what=".ex-link" data-class="ex"></div>
+<div class="anim-addclass slide" data-what=".ex-blockquote" data-class="ex"></div>
+<div class="anim-addclass slide" data-what=".ex-codeblock" data-class="ex"></div>
+<div class="anim-addclass slide" data-what=".ex-ulist" data-class="ex"></div>
+<div class="anim-addclass slide" data-what=".ex-olist" data-class="ex"></div>
+</div></section>
+
+
+<section class="slide"><div>
+## Result
+
+~~~ html
+<h2>Header like this</h2>
+
+<p>This is <em>emphasized</em> and this <strong>strong</strong>! And
+<a href="http://kramdown.gettalong.org">this is an inline link</a>. This whole
+thing is a paragraph.</p>
+
+<blockquote>
+  <p>Blockquotes are nice.
+And can be lazy.</p>
+</blockquote>
+
+<pre><code>Code blocks are just indented chunks of text.
+</code></pre>
+
+<ul>
+  <li>Unordered list</li>
+  <li>Can use different markers</li>
+  <li>Like we do here</li>
+</ul>
+
+<ol>
+  <li>Looks like an</li>
+  <li>ordered list</li>
+  <li>at least to me!</li>
+</ol>
+~~~
+</div></section>
+
+
+<section class="slide"><div>
+## Current Status
+
+{:.xkcd}
+![xkcd-standards](xkcd-standards.png)\\
+Source: [xkcd 927](https://xkcd.com/927/)
+
+* {:.slide} Many implementations (>70)<span class="slide">, nearly all *differ*{:.bad}</span>
+* {:.slide.rel} *No*{:.bad} single specification<span class="slide"> (CommonMark tried, failed?)</span>
+  <span class="anim-addclass slide" data-what=".xkcd" data-class="show"></span>
+  <span class="anim-addclass anim-continue slide" data-what=".xkcd" data-class="hide"></span>
+  <span class="anim-removeclass slide" data-what=".xkcd" data-class="show"></span>
+* {:.slide} Only the basic syntax portable to other implementations
+* {:.slide.hl} But widely used
+
+{:.slide.center.logos}
+For example:
+![Github](logo-github.png){:height="50px"}
+![Stack Overflow](logo-stackoverflow.png){:height="50px"}
+![WordPress](logo-wordpress.png){:height="50px"}\\
+![Leanpub](logo-leanpub.png){:height="100px" style="margin: 10px"}
+</div></section>
+
+
+<section class="slide"><div>
+## And What is *kramdown*{:.hl}?
+
+{:.slide}
+kramdown is a pure-Ruby Markdown implementation
+
+* {:.slide} based on ideas from Maruku and Markdown Extra
+* {:.slide} *fast*{:.hl} (but not C-like fast)
+* {:.slide} supports *extended syntax*{:.hl}
+* {:.slide} easily *extensible*{:.hl}
+* {:.slide} multiple parsers and converters
+</div></section>
+
+
+<section class="slide"><div>
+## Architecture
+
+![kramdown architecture](kramdown.png){:height="350px"}
+</div></section>
+
+
+<section class="slide"><div>
+## kramdown's Extended Syntax, Part 1
+
+* {:.slide} *Header IDs*{:.hl}
+
+  <pre>
+  # Some long header <span class="em">{#shortid}</span>
+  </pre>
+
+* {:.slide} *Fenced codeblocks*{:.hl}
+
+  <pre>
+  <span class="em">~~~</span>
+  codeblock is here
+  <span class="em">~~~</span>
+  </pre>
+
+* {:.slide} *Definition lists*{:.hl}
+
+  <pre>
+  <span class="em">term 1
+  term 2
+  :</span> definition, all block level elements allowed
+
+  <span class="em">term 3
+  :</span> another definition
+  </pre>
+
+</div></section>
+
+
+<section class="slide"><div>
+## kramdown's Extended Syntax, Part 2
+
+* {:.slide} *Simple tables*{:.hl}
+
+  <pre>
+  |-----------------------------------|
+  | header | cells are | in first row |
+  | :---   |   :---:   |     -------: |
+  | left   |   center  |        right |
+  | other  |   data    |     *inline* |
+  |-----------------------------------|
+  </pre>
+
+* {:.slide} *Footnotes*{:.hl}
+
+  <pre>
+  There is a footnote marker<span class="em">[^note]</span> here.
+
+  <span class="em">[^note]:
+      Here can be any blocklevel content.</span>
+  </pre>
+
+* {:.slide} EOB (end of block) marker
+
+  <pre>
+  * a list
+  <span class="em">^</span>
+  * another list
+  </pre>
+</div></section>
+
+<section class="slide"><div>
+## kramdown's Extended Syntax, Part 3
+
+* {:.slide} *Inline attribute lists*{:.hl}
+
+  <pre>
+  A [link](some_place.html)<span class="em">{:.classX}</span> with class!
+  <span class="em">{: #paraid style="text-align: center"}</span>
+
+  <span class="em">{:ref}</span>
+  Assign IDs, classes or any key-value pair to any
+  span or block level element.
+
+  <span class="em">{:ref: .multiple.classes.allowed}</span>
+  </pre>
+
+* {:.slide} And some more... see the syntax guide!
+</div></section>
+
+
+<section class="slide"><div>
+## Syntax Caveats
+
+* {:.slide} Correct indentation for lists and codeblocks
+* {:.slide} Blank lines needed to separate block level elements
+</div></section>
+
+
+
+<section class="slide"><div>
+## Commandline Usage
+
+<div class="shell">
+~~~ shell
+shell> cat file
+~~~
+~~~ markdown
+# Test
+
+A paragraph
+~~~
+</div>
+<div class="shell">
+~~~ shell
+shell> kramdown file
+~~~
+~~~ html
+<h1 id="test">Test</h1>
+
+<p>A paragraph</p>
+~~~
+</div>
+<div class="shell">
+~~~ shell
+shell> kramdown --no-auto-ids file | kramdown -i html -o kramdown
+~~~
+~~~ markdown
+# Test
+
+A paragraph
+~~~
+</div>
+</div></section>
+
+
+<section class="slide"><div>
+## Library Usage
+
+~~~ ruby
+require 'kramdown/document'
+
+puts Kramdown::Document.new(ARGF.read, auto_ids: false).to_html
+~~~
+</div></section>
+
+
+<section class="slide"><div>
+## Links
+
+kramdown Syntax Guide
+: <http://kramdown.gettalong.org/syntax.html>
+
+  The go-to ressource when one is unsure about the correct syntax.
+
+Babelmark
+: <http://johnmacfarlane.net/babelmark2>
+
+  Allows comparing various Markdown implementations
+</div></section>
+
+
+<section class="slide"><div class="center">
+# Thank you!
+
+Questions?
+</div></section>
+
