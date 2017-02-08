@@ -14,7 +14,7 @@ class Turtle
   Instruction = Struct.new(:operation, :arg)
 
   # Represents the state of the turtle.
-  State = Struct.new(:x, :y, :heading, :color, :pen_down)
+  State = Struct.new(:x, :y, :heading, :color, :width, :pen_down)
 
   # Returns an initialized turtle graphic object.
   #
@@ -112,6 +112,7 @@ class Turtle
     heading = 0
     pen_down = true
     color = 0
+    width = 1
 
     stack = []
     frame_states = []
@@ -151,16 +152,23 @@ class Turtle
         canvas.stroke_color(color)
         canvas.move_to(x, y)
 
+      when :width
+        width = instruction.arg * @scale
+        canvas.stroke
+        canvas.line_width(width)
+        canvas.move_to(x, y)
+
       when :push
-        stack << State.new(x, y, heading, color, pen_down)
+        stack << State.new(x, y, heading, color, width, pen_down)
 
       when :pop
         if stack.empty?
           raise ArgumentError, "No more pushed state available"
         end
-        x, y, heading, color, pen_down = *stack.pop
+        x, y, heading, color, width, pen_down = *stack.pop
         canvas.stroke
         canvas.stroke_color(color)
+        canvas.line_width(width)
         canvas.move_to(x, y)
 
       else
@@ -217,6 +225,12 @@ class Turtle
   # argument for HexaPDF::Content::Canvas#stroke_color
   def color(*args)
     @instructions << Instruction.new(:color, args)
+    self
+  end
+
+  # Defines the line width that should be used for subsequent drawing operations.
+  def width(num)
+    @instructions << Instruction.new(:width, num)
     self
   end
 
