@@ -112,7 +112,7 @@ class Turtle
     heading = 0
     pen_down = true
     color = 0
-    width = 1
+    width = @scale
 
     stack = []
     frame_states = []
@@ -124,7 +124,7 @@ class Turtle
     end
 
     canvas.stroke_color(color)
-    canvas.line_width(@scale)
+    canvas.line_width(width)
     canvas.move_to(x, y)
 
     @instructions.each do |instruction|
