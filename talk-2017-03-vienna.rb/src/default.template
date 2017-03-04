@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Using Markdown with the kramdown Library and Tools</title>
+
+  <!-- Required stylesheet -->
+  <link rel="stylesheet" media="screen" href="deck.js/core/deck.core.css">
+
+  <!-- Extension CSS files go here. Remove or add as needed. -->
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/status/deck.status.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/clone/deck.clone.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/timekeeper/deck.timekeeper.css">
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="normalize.css">
+  <link rel="stylesheet" media="screen" href="style.css">
+
+  <!-- Basic black and white print styles -->
+  <link rel="stylesheet" media="print" href="deck.js/core/print.css">
+
+  <!-- Required Modernizr file -->
+  <script src="deck.js/modernizr.custom.js"></script>
+</head>
+<body>
+  <div class="deck-container">
+
+    <!-- Begin slides. -->
+
+    <webgen:block name="content" />
+
+    <!-- End slides. -->
+
+    <!-- Begin extension snippets. -->
+
+    <!-- deck.status snippet -->
+    <p class="deck-status" aria-role="status">
+      <span class="deck-status-current"></span>
+      /
+      <span class="deck-status-total"></span>
+    </p>
+
+    <!-- End extension snippets. -->
+  </div>
+
+<!-- Required JS files. -->
+<script src="deck.js/jquery.min.js"></script>
+<script src="deck.js/core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="deck.js/extensions/menu/deck.menu.js"></script>
+<script src="deck.js/extensions/status/deck.status.js"></script>
+<script src="deck.js/extensions/events/deck.events.js"></script>
+<script src="deck.js/extensions/step/deck.step.js"></script>
+<script src="deck.js/extensions/anim/deck.anim.js"></script>
+<script src="deck.js/extensions/clone/deck.clone.js"></script>
+<script src="deck.js/extensions/timekeeper/deck.timekeeper.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+
+<script>
+  $(function() {
+    $.deck('.slide', {fitFollowsClone: false});
+  });
+</script>
+</body>
+</html>

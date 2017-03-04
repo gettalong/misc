@@ -1,0 +1,332 @@
+<section class="slide"><div class="center">
+
+# Fibers vs Procs {#title}
+
+\\
+Thomas Leitner
+
+![github](github.png){: style="vertical-align: middle"} @gettalong  
+![twitter](twitter.png){: style="vertical-align: middle; margin-right: -8px" height="48px" height="48px"} @_gettalong
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## The questions guiding this talk
+
+- What are Procs?
+- What are Fibers?
+- When to use what?
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## Procs are closures,<br/> they preserve their environment
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## How to create a Proc?
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Block Syntax
+
+~~~
+1.upto(10) {|n| puts n }
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## proc Syntax
+
+~~~
+block = proc {|n| puts n}
+1.upto(10, &block)
+~~~
+
+Equivalent to `Proc.new`
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## lambda Syntax
+
+~~~
+block = lambda {|n| puts n}
+1.upto(10, &block)
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Differences between Procs and Lambdas
+
+- Lambdas check number of parameters
+- Procs destructure a single argument
+- `return` works differently
+  - lambda: returns from lambda
+  - proc: returns from method/context where it was **defined**{:.hl}
+
+</div></section>
+
+<section class="slide"><div class="">
+
+### Argument checking and destructuring
+
+~~~
+p = proc {|a, b| [a, b]}
+l = lambda {|a, b| [a, b]}
+x = "string"
+def x.to_ary; chars.to_a; end
+
+                # using p        using l
+.call(1)        # => [1, nil]    ArgumentError (given 1, expected 2)
+.call(1, 2)     # => [1, 2]      [1, 2]
+.call(1, 2, 3)  # => [1, 2]      ArgumentError (given 3, expected 2)
+.call([1, 2])   # => [1, 2]      ArgumentError (given 1, expected 2)
+.call(x)        # => ["s", "t"]  ArgumentError (given 1, expected 2)
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Different `return` behavior
+
+~~~
+p = proc { return 1 }
+l = lambda { return 1 }
+
+p.call  # => LocalJumpError: unexpected return
+l.call  # => 1
+~~~
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## Use `Proc#lambda?` to determine "lambdaness"
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## Oldie, but goodie detailed (executable) rundown:
+
+<https://innig.net/software/ruby/closures-in-ruby>
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## On to the world of Fibers
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## What are Fibers?
+
+- Fibers are (semi-)coroutines
+- Code blocks that can be paused and resumed
+- Scheduling must be done by programmer
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## A simple example
+
+~~~
+f = Fiber.new do |initial|
+  middle = Fiber.yield(initial)
+  Fiber.yield("before middle")
+  ending = Fiber.yield(middle)
+end
+
+f.resume("initial")  # => "initial"
+f.resume("middle")   # => "before middle"
+f.resume("ignored")  # => "middle"
+f.resume("end")      # => "end"
+f.resume             # => FiberError: dead fiber called
+~~~
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## But can't we do this with procs?
+
+</div></section>
+
+<section class="slide"><div class="">
+
+~~~
+def fiber
+  nr_invoked = 0
+  store = nil
+  proc do |param|
+    case (nr_invoked += 1)
+    when 2 then store = param; "before middle"
+    when 3 then store
+    else param
+    end
+  end
+end
+
+f = fiber
+f.call("initial")  # => "initial"
+f.call("middle")   # => "before middle"
+f.call("ignored")  # => "middle"
+f.call("end")      # => "end"
+f.call             # => nil
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Fibers can be transferred,<br /> making them full coroutines
+
+~~~
+require 'fiber'
+
+f1 = Fiber.new { "fiber 1" }
+f2 = Fiber.new { "fiber 2"; f1.transfer; Fiber.yield "after" }
+
+f2.resume   # => "fiber 1"
+f2.resume   # => FiberError: double resume
+f2.transfer # => "after"
+f2.resume   # => FiberError: cannot resume transferred Fiber
+f2.transfer # => nil
+~~~
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## Real world use case for fibers
+
+## Pipelines
+{:.hl}
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Pipelines
+
+- One producer
+- Possibly multiple filters
+- One consumer
+
+~~~
+consumer(filter_a(filter_b(producer)))
+~~~
+
+</div></section>
+
+<section class="slide"><div class="center">
+
+## Used in HexaPDF for<br /> the PDF filter implementation
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Producer reading data chunks<br/> from an IO (simplified)
+
+~~~
+def producer(io)
+  Fiber.new do
+    while (data = io.read(2**16))
+      Fiber.yield(data)
+    end
+  end
+end
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Consumer concatenating the data
+
+~~~
+def consumer(producer)
+  str = ''.b
+  while producer.alive? && (data = producer.resume)
+    str << data
+  end
+  str
+end
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Sample filter doing ASCII hex decoding<br /> (simplified)
+
+~~~
+def ascii_hex_decode(source)
+  Fiber.new do
+    rest = nil
+    while source.alive? && (data = source.resume)
+      data = rest << data if rest
+      rest = (data.size.odd? ? data.slice!(-1, 1) : nil)
+      Fiber.yield([data].pack('H*'))
+    end
+    [rest].pack('H*') if rest
+  end
+end
+~~~
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Some links
+
+* <http://www.inf.puc-rio.br/~roberto/docs/MCC15-04.pdf>
+  - Producer-Consumer Problem
+  - Pipelines (i.e. `consumer(filter(producer))`)
+  - Generators (think Enumerators in Ruby)
+* <https://github.com/ruby/ruby/tree/trunk/sample/trick2015/eregon>
+  - Sudoku solver
+* <https://pragdave.me/blog/2007/12/30/pipelines-using-fibers-in-ruby-19.html>
+  - Pipelines Using Fibers in Ruby 1.9
+
+</div></section>
+
+<section class="slide"><div class="">
+
+## Take-away Points
+
+- Differences between proc and its lambda variant
+- Procs always start at the beginning, may return early
+- Fibers start at the beginning and continue right after yielding
+- `Fiber.yield` and `Fiber#resume` can be used to exchange data
+- Be aware of the restrictions when using `Fiber#transfer`
+
+</div></section>
+
+
+<section class="slide"><div class="center">
+
+# Thank you! {#thanks}
+
+Slides available at\\
+<http://talks.gettalong.org/2017-03-viennarb/>
+
+</div></section>
+
