@@ -1,0 +1,7 @@
+prelude: |
+  a = 5
+  b = 10
+
+benchmark:
+  'a < b': 'a < b ? b : a'
+  '[a, b].max': '[a, b].max'
