@@ -164,7 +164,7 @@ slide_info
 
 canvas = doc.pages.add.canvas
 center_text(canvas, "Features", vpos: box.height * 0.85)
-canvas.font("normal", size: 60)
+canvas.font("normal", size: 60).leading(70)
 canvas.text(<<EOF, at: [400, 600])
 •    Vector graphics instead of bitmap
 •    Reusable by implementing it as graphic object
@@ -174,7 +174,7 @@ slide_info
 
 canvas = doc.pages.add.canvas
 center_text(canvas, "Problems With PDF Animation", vpos: box.height * 0.85)
-canvas.font("normal", size: 60)
+canvas.font("normal", size: 60).leading(70)
 canvas.text(<<EOF, at: [100, 600])
 •    Straight-forward implementation grows file size in O(n^2/2) manner
 •    Alternative XObject nesting: only ~30 nesting levels possible
