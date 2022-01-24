@@ -53,7 +53,7 @@ class Turtle
     page = doc.pages.add
     page.canvas.image(image, at: [@x - turtle_size / 2, @y - turtle_size / 2], width: turtle_size)
 
-    form = doc.wrap(Type: :XObject, Subtype: :Form)
+    form = doc.wrap({Type: :XObject, Subtype: :Form})
     canvas = HexaPDF::Content::Canvas.new(form)
     frame_states = draw(canvas, mark_frames: true, turns_as_frames: turns_as_frames)
     frames = HexaPDF::Filter.string_from_source(canvas.stream_data.fiber).split(/\/Turtle MP\n/)
